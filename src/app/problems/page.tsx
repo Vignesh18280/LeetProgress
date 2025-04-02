@@ -1,7 +1,7 @@
 "use client";
-import Navbar from "../../../components/Navbar";
-import Topics from "../../../components/Topics";
-import Difficulty from "../../../components/Difficulty";
+import Navbar from "../../components/Navbar";
+import Topics from "../../components/Topics";
+import Difficulty from "../../components/Difficulty";
 import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from "@heroui/table";
 import Image from "next/image";
 
@@ -47,8 +47,7 @@ export default function Problems() {
                                             href={problem.link}
                                         >
                                             <Image src="/leetlogo.png" alt="LeetProgress Logo" width={50} height={50} className="rounded-full"/>
-                                        </a>
-                                        
+                                        </a>                                        
                                     </TableCell>
                                 </TableRow>
                             ))}
