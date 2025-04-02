@@ -3,8 +3,8 @@ import Navbar from "../../../components/Navbar";
 import Topics from "../../../components/Topics";
 import Difficulty from "../../../components/Difficulty";
 import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from "@heroui/table";
+import Image from "next/image";
 
-// Sample Problem Data
 const problems = [
     { name: "Two Sum", contest: "BW-100", link: "https://leetcode.com/problems/two-sum/" },
     { name: "Reverse Linked List", contest: "W-300", link: "https://leetcode.com/problems/reverse-linked-list/" },
@@ -23,10 +23,9 @@ export default function Problems() {
             <div className="flex w-full justify-center mt-8">
                 <div className="w-10/12 bg-white/50 backdrop-blur-lg shadow-xl rounded-xl overflow-hidden">
                     <Table aria-label="LeetProgress Problem Table" className="w-full">
-                        {/* Header */}
                         <TableHeader>
                             <TableColumn className="text-left text-lg font-bold uppercase bg-gray-200 p-4">
-                                Problem
+                                Problems
                             </TableColumn>
                             <TableColumn className="text-left text-lg font-bold uppercase bg-gray-200 p-4">
                                 Contest
@@ -35,8 +34,6 @@ export default function Problems() {
                                 Solve
                             </TableColumn>
                         </TableHeader>
-                        
-                        {/* Body */}
                         <TableBody>
                             {problems.map((problem, index) => (
                                 <TableRow 
@@ -48,12 +45,10 @@ export default function Problems() {
                                     <TableCell className="text-left text-lg p-4">
                                         <a
                                             href={problem.link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition"
                                         >
-                                            Solve →
+                                            <Image src="/leetlogo.png" alt="LeetProgress Logo" width={50} height={50} className="rounded-full"/>
                                         </a>
+                                        
                                     </TableCell>
                                 </TableRow>
                             ))}
