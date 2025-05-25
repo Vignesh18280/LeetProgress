@@ -1,11 +1,11 @@
 "use client";
 import Link from "next/link";
-import Navbar from "../components/Navbar";
+
 
 export default function Home() {
+
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-white to-gray-100 text-gray-900 ">
-      <Navbar />
+    <div className="min-h-screen  w-full bg-gradient-to-b from-white to-gray-100 text-gray-900 ">
       <div className="flex flex-col items-center justify-center text-center mt-20 px-4">
         <h1 className="text-5xl font-extrabold leading-tight">
           Master Leetcode,
@@ -19,7 +19,7 @@ export default function Home() {
         </p>
         <div className="mt-6 flex space-x-4">
           <Link href="/problems">
-            <button className="bg-black text-white px-6 py-3 rounded-lg text-lg font-medium cursor-pointer" >
+            <button className="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg text-lg font-medium cursor-pointer" >
               Explore Problems
             </button>
           </Link>

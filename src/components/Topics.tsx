@@ -1,3 +1,4 @@
+"use client"
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
@@ -39,7 +40,7 @@ export default function Topics() {
                     ))
                 }
                 <div 
-                    className="bg-gray-700 text-gray-900 dark:text-white rounded-md px-3 py-1 mx-2 my-1 cursor-pointer hover:bg-gray-600 transition-all flex items-center"
+                    className="bg-gray-700 text-white  rounded-md px-3 py-1 mx-2 my-1 cursor-pointer hover:bg-gray-600 transition-all flex items-center"
                     onClick={() => setCollapse(!collapse)}
                 >
                     {collapse ? "Expand" : "Collapse"}
