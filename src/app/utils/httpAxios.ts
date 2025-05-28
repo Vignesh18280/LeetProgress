@@ -1,8 +1,7 @@
-
 import axios from "axios";
 
 const httpAxios = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "https://leet-progress.vercel.app/",
   headers: {
     "Content-Type": "application/json",
   },
