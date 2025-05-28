@@ -14,32 +14,40 @@ type ProblemType = {
 
 export default function Problems() {
     const [problems, setProblems] = useState<ProblemType[]>([]);
+    const [topic, setTopic] = useState<string | null>(null);
     const [problemNumber, setProblemNumber] = useState(3);
     const [currentPage, setCurrentPage] = useState(1);
     const postsPerPage = 5;
-
     useEffect(() => {
         const getData = async () => {
             try {
                 const result = await httpAxios.post("/api/problems", { problemNumber }).then(res => res.data);
                 setProblems(result);
+                setCurrentPage(1);
             } catch (error) {
                 console.log(error);
             }
         };
         getData();
-    }, []);
-
+    }, [problemNumber]);
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [topic]);
+  
     const indexOfLast = currentPage * postsPerPage;
     const indexOfFirst = indexOfLast - postsPerPage;
-    const currentPosts = problems.slice(indexOfFirst, indexOfLast);
-    const totalPages = Math.ceil(problems.length / postsPerPage);
+    const filteredProblems = topic
+  ? problems.filter((problem) => problem.topics.includes(topic))
+  : problems;
+  const currentPosts = filteredProblems.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(filteredProblems.length / postsPerPage);  
 
     return (
         <div className="min-h-screen w-full bg-gradient-to-b from-white to-gray-100 text-gray-900">
             <div className="flex mt-4 mx-8 items-start">
-                <Difficulty />
-                <Topics />
+            <Difficulty number={problemNumber} setNumber={setProblemNumber} />
+            <Topics topic={topic} setTopic={setTopic} />
+            
             </div>
             <div className="flex w-full justify-center mt-8">
                 <div className="w-10/12 bg-white/50 backdrop-blur-lg shadow-xl rounded-xl overflow-hidden">
@@ -77,6 +85,7 @@ export default function Problems() {
                                             </span>
                                             ))}
                                         </div>
+                                        
                                     </TableCell>
                                     <TableCell className="text-left text-lg p-4">
                                         <a href={problem.link} target="_blank">

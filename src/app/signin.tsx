@@ -2,7 +2,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Session } from "next-auth";
-import httpAxios from "./utils/httpAxios";
 import { toast } from "sonner";
 
 export default function SignIn({ session }: { session: Session | null }) {
@@ -23,7 +22,7 @@ export default function SignIn({ session }: { session: Session | null }) {
       router.push('/problems');
     }
     auth();
-  }, []);
+  }, [router, session]);
 
   return null;
 }

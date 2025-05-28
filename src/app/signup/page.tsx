@@ -3,7 +3,10 @@ import React, { useState } from 'react'
 import { signIn } from "next-auth/react";
 import httpAxios from '../utils/httpAxios';
 import { toast } from 'sonner';
-const page = () => {
+import { useRouter } from 'next/navigation';
+import { AxiosError } from 'axios';
+const Page = () => {
+  const router = useRouter();
   const [data, setData] = useState({  
     name:"",
     email:"",
@@ -15,15 +18,18 @@ const page = () => {
   const doSignUp = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      console.log(data);
+      // console.log(data);
       const result = await httpAxios.post("/api/users", data).then((response) => response.data)
-      console.log(result);
-      if(result.success){
-        toast.success(result.message);
-      }
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || error.message || "Signup failed");
+      // console.log(result);
 
+      if(result.success){
+        router.push('/login');
+        toast.success(result.message);
+
+      }
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ message: string }>;
+      toast.error(err.response?.data?.message || err.message || "Signup failed");
     }
   }
   return (
@@ -47,7 +53,6 @@ const page = () => {
             <label className="font-bold">Confirm Password:</label>
             <input type="password" placeholder='Enter to confirm password' className='border border-black p-2 rounded-[5px]' name="confirmPassword" onChange={(e) => setData({...data, confirmPassword:e.target.value})} />
           </div>
-          <span className='text-sm text-l'>Already have an account?</span>
           <button
             onClick={() => {
               signIn("google", { callbackUrl: "/secret" });
@@ -58,6 +63,7 @@ const page = () => {
             Sign up with Google
           </button>
           <button className="cursor-pointer border px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-all mt-3" onClick={doSignUp}>Sign up</button>
+          <span className='text-sm text-l mt-3'>Already have an account? <a className="text-blue-600 " href="/login">Login</a></span>
         </div>
        
       </div>
@@ -65,4 +71,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

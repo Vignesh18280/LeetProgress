@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import jwt from 'jsonwebtoken';
 import { User } from "../../models/user";
 import connectDB from "../../lib/db";
-
+import dotenv from "dotenv";
+dotenv.config();
 export async function GET(request) {
   try {
     await connectDB();
@@ -18,8 +19,8 @@ export async function GET(request) {
 
     let data;
     try {
-      data = jwt.verify(authToken, 'edcfvdewrefv'); 
-    } catch (err) {
+      data = jwt.verify(authToken, process.env.token_key); 
+    } catch {
       return NextResponse.json(
         { message: "Invalid or expired token", success: false },
         { status: 401 }

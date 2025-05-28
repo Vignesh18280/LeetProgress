@@ -1,8 +1,11 @@
-"use client"
-import { useState } from "react";
+"use client";
+import { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-
-export default function Topics() {
+type TopicsProps = {
+    topic: string | null;
+    setTopic: React.Dispatch<React.SetStateAction<string | null>>;
+  };
+export default function Topics({ topic, setTopic } : TopicsProps) {
     const topics: string[] = [
         "Array", "String", "Hash Table", "Dynamic Programming", "Math", "Sorting", "Greedy",
         "Depth-First Search", "Binary Search", "Database", "Matrix", "Breadth-First Search",
@@ -21,26 +24,38 @@ export default function Topics() {
     ];
 
     const [collapse, setCollapse] = useState(true);
-
+    const [selectedTopic, setSelectedTopic] = useState<string | null>(topic);
+    useEffect(() => {
+        setTopic(selectedTopic);
+    }, [selectedTopic, setTopic]);
     return (
-        <div className="flex flex-col items-star ml-8">
-            <div className="text-lg font-extrabold">
-                Topics:
-            </div>
-            <div className="border-1 rounded-md border-gray-800 flex flex-wrap py-1 px-2">
-                { 
+        <div className="flex flex-col items-start ml-8 mr-8">
+            <div className="text-lg font-extrabold">Topics:</div>
+            <div className="border rounded-md border-gray-800 flex flex-wrap py-1 px-1 mt-2">
+                {selectedTopic && (
+                    <div
+                        className="bg-red-500 text-white rounded-md px-3 py-1 mx-2 my-1 cursor-pointer hover:bg-red-600 transition-all"
+                        onClick={() => setSelectedTopic(null)}
+                        aria-label="Clear topic filter"
+                    >
+                        Clear
+                    </div>
+                )}
+                {
                     (collapse ? topics.slice(0, 8) : topics).map((topic, index) => (
-                        <div 
-                            key={index} 
-                            className="bg-gray-100 text-gray-900 rounded-md px-3 py-1 mx-2 my-1 cursor-pointer hover:bg-gray-400 transition-all"
+                        <div
+                            key={index}
+                            className={`rounded-md px-3 py-1 mx-2 my-1 cursor-pointer transition-all
+                                ${selectedTopic === topic ? "bg-gray-600 text-white" : "bg-gray-100 text-gray-900 hover:bg-gray-400"}`}
+                            onClick={() => setSelectedTopic(topic)}
                             aria-label={`Topic ${topic}`}
                         >
                             {topic}
                         </div>
                     ))
                 }
-                <div 
-                    className="bg-gray-700 text-white  rounded-md px-3 py-1 mx-2 my-1 cursor-pointer hover:bg-gray-600 transition-all flex items-center"
+                <div
+                    className="bg-gray-700 text-white rounded-md px-3 py-1 mx-2 my-1 cursor-pointer hover:bg-gray-600 transition-all flex items-center"
                     onClick={() => setCollapse(!collapse)}
                 >
                     {collapse ? "Expand" : "Collapse"}

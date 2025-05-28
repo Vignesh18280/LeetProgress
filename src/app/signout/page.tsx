@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
 import { signOut } from "next-auth/react";
-import httpAxios from "@/app/utils/httpAxios";
+import httpAxios from "../utils/httpAxios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useUser } from "../context/UserContext";
 
 export default function SignOutButton() {
-
+  const { fetchUser } = useUser();
   const router = useRouter();
   const handleLogout = async () => {
 
@@ -23,6 +23,7 @@ export default function SignOutButton() {
     try {
       const response = await httpAxios.post("/api/logout").then((res) => res.data);
       if (response.success) {
+        await fetchUser();
         router.push("/");
         toast.success(response.message);
       }

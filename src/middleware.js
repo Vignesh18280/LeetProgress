@@ -1,4 +1,4 @@
-import { NextResponse, NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 
 export function middleware(request) {
 //   console.log("middleware executed");
@@ -7,7 +7,7 @@ export function middleware(request) {
   const { pathname } = request.nextUrl;
 
 
-  if (pathname === '/api/users/login') {
+  if (pathname === '/api/users/login') { 
     return NextResponse.next();
   }
 
@@ -18,9 +18,9 @@ export function middleware(request) {
     return NextResponse.redirect(new URL('/problems', request.url));
   }
 
-  // if (!authToken && pathname === '/problems') {
-  //   return NextResponse.redirect(new URL('/login', request.url));
-  // }
+  if (!authToken && pathname === '/problems') {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
 
   return NextResponse.next();
 }

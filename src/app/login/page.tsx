@@ -5,8 +5,11 @@ import { useState } from "react";
 import { toast } from "sonner";
 import httpAxios from "../utils/httpAxios";
 import { useRouter } from "next/navigation";
+import { useUser } from "../context/UserContext";
+import { AxiosError } from "axios";
 
 export default function SignOutButton() {
+  const { fetchUser } = useUser();
   const router = useRouter();
   const [data, setData] = useState({
     email:"",
@@ -16,16 +19,17 @@ export default function SignOutButton() {
   const doLogIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      console.log(data);
+      // console.log(data);
       const result = await httpAxios.post("/api/users/login", data).then((response) => response.data)
-      console.log(result.user);
+      // console.log(result.user);
       if(result.success){
+        await fetchUser();
         router.push('/problems');
         toast.success(result.message);
       }
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || error.message || "Login failed");
-
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ message: string }>;
+      toast.error(err.response?.data?.message || err.message || "Login failed");
     }
   }
 
@@ -42,7 +46,6 @@ export default function SignOutButton() {
             <label className="font-bold">Password:</label>
             <input type="password" placeholder='Enter your password' className='border border-black p-2 rounded-[5px]' name="password" onChange={(e) => setData({...data, password:e.target.value})} />
           </div>
-          <span className='text-sm text-l'>Dont have an account? </span>
           <button
             onClick={() => {
               signIn("google", { callbackUrl: "/secret" });
@@ -53,6 +56,7 @@ export default function SignOutButton() {
             Sign in with Google
           </button>
           <button className="cursor-pointer border px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-all mt-3" onClick={doLogIn}>Log In</button>
+          <span className='text-sm text-l mt-3'>Dont have an account? <a className="text-blue-600 " href="/signup">Signup</a> </span>
         </div>
       </div>
 

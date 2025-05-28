@@ -3,6 +3,8 @@ import connectDB from "../../../lib/db";
 import {User} from "../../../models/user"
 import bcrypt from "bcrypt"
 import jwt from 'jsonwebtoken'
+import dotenv from "dotenv";
+dotenv.config();
 await connectDB();
 
 export async function POST(request) {
@@ -33,7 +35,7 @@ export async function POST(request) {
         const tokenData = {
             userId: user._id
         }
-        const token = await jwt.sign(tokenData, 'edcfvdewrefv', {expiresIn:'1d'});
+        const token = await jwt.sign(tokenData, process.env.token_key, {expiresIn:'1d'});
         // console.log(token);
         user = {
             _id: user._id,

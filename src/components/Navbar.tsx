@@ -1,41 +1,17 @@
-"use client"
+'use client';
 import Image from "next/image";
 import Link from "next/link";
 import SignOutButton from "../../src/app/signout/page";
-import { useEffect } from "react";
-import { Avatar, AvatarImage } from "@/components/ui/avatar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { LogOut, User2 } from "lucide-react";
-import { useState } from "react";
-import httpAxios from "@/app/utils/httpAxios";
-import { toast } from "sonner";
+import { Avatar, AvatarImage } from "./ui/avatar"
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
+import { LogOut} from "lucide-react";
+import { useUser } from "../app/context/UserContext";
+
+
+
 export default function Navbar() {
-        const [user, setUser] = useState<any>(null);
-        useEffect(() => {
-          const fetchCurrentUser = async () => {
-            try {
-                const storedUser : any = localStorage.getItem("user");
-                if (storedUser) {
-                    const parsedUser = JSON.parse(storedUser);
-                    toast.success(`Wellcome back ${user?.name}`)
-                    setUser(parsedUser);
-                    return; 
-                  }
-              const response = await httpAxios.get("/api/current");
-              setUser(response.data);
-            //   console.log("Current user:", response.data);
-            } catch (error : any) {
-                if (error.response?.status === 401) {
-                    console.warn("User not authenticated");
-                    setUser(null);
-                  } else {
-                    console.error("Failed to fetch user", error);
-                  }
-            }
-          };
-      
-          fetchCurrentUser();
-        }, []);
+        const { user } = useUser();
+        // console.log(user);
     return (
         <nav className="w-full flex justify-between items-center px-6 py-4">
             <div className="flex items-center">
@@ -76,12 +52,12 @@ export default function Navbar() {
             ) : (
                 <div className="flex ">
                     <Link href="/login">
-                        <button className=" px-2 py-1 rounded-md text-lg cursor-pointer mr-2">
+                        <button className=" px-3 py-1 rounded-md text-lg cursor-pointer mr-2 hover:bg-gray-200">
                             Login
                         </button>
                     </Link>
                     <Link href="/signup">
-                    <button className="bg-black text-white px-2 py-1 rounded-md text-lg cursor-pointer">
+                    <button className="bg-gray-900 text-white px-3 py-1 rounded-md text-lg cursor-pointer hover:bg-gray-800">
                         Sign Up
                     </button>
                     </Link>

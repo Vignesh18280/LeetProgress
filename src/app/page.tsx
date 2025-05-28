@@ -23,9 +23,11 @@ export default function Home() {
               Explore Problems
             </button>
           </Link>
-          <button className="border border-gray-800 text-gray-900 px-6 py-3 rounded-lg text-lg font-medium cursor-pointer">
-          Learn More
-          </button>
+          <Link href="/about">
+            <button className="border border-gray-800 text-gray-900 px-6 py-3 rounded-lg text-lg font-medium cursor-pointer">
+            Learn More
+            </button>
+          </Link>
         </div>
       </div>
     </div>

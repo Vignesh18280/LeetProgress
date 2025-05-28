@@ -50,7 +50,7 @@ export async function POST(request) {
     }
 }
 
-export async function GET(request) {
+export async function GET() {
     let users = [];
     try {
         users = await User.find();
