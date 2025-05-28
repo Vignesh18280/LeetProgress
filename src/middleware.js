@@ -18,9 +18,9 @@ export function middleware(request) {
     return NextResponse.redirect(new URL('/problems', request.url));
   }
 
-  // if (!authToken && pathname === '/problems') {
-  //   return NextResponse.redirect(new URL('/login', request.url));
-  // }
+  if (!authToken && pathname === '/problems') {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
 
   return NextResponse.next();
 }
