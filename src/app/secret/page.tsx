@@ -1,5 +1,5 @@
 
-import { auth } from "@/auth";
+import { auth } from "../../auth";
 import { Session } from "next-auth";
 import SignIn from "../signin";
 

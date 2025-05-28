@@ -68,31 +68,35 @@ export default function Problems() {
                         </TableHeader>
                         <TableBody>
                             {currentPosts.map((problem, index) => (
-                                <TableRow
-                                    key={index}
-                                    className={`border-b border-gray-300 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"} hover:bg-gray-100 transition`}
+                               <TableRow
+                                key={index}
+                                    onClick={() => window.open(problem.link, "_blank")}
+                                    className={`cursor-pointer border-b border-gray-300 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"} hover:bg-gray-100 transition`}
                                 >
                                     <TableCell className="text-left text-lg p-4">{problem.title}</TableCell>
                                     <TableCell className="text-left text-md p-4">{problem.contestName}</TableCell>
                                     <TableCell className="text-left text-lg p-4">
                                         <div className="flex flex-wrap gap-2">
-                                            {problem.topics.map((topic, i) => (
+                                        {problem.topics.map((topic, i) => (
                                             <span
-                                                key={i}
-                                                className="bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-sm"
+                                            key={i}
+                                            className="bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-sm"
                                             >
-                                                {topic}
+                                            {topic}
                                             </span>
-                                            ))}
+                                        ))}
                                         </div>
-                                        
                                     </TableCell>
                                     <TableCell className="text-left text-lg p-4">
-                                        <a href={problem.link} target="_blank">
-                                            <Image src="/leetlogo.png" alt="LeetProgress Logo" width={50} height={50} className="rounded-full" />
-                                        </a>
+                                        <Image
+                                        src="/leetlogo.png"
+                                        alt="LeetProgress Logo"
+                                        width={50}
+                                        height={50}
+                                        className="rounded-full"
+                                        />
                                     </TableCell>
-                                </TableRow>
+                             </TableRow>
                             ))}
                         </TableBody>
                     </Table>
