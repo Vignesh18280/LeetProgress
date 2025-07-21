@@ -60,11 +60,11 @@ export default function Problems() {
                         </div>
                     ) : (
                         <>
-                            <Table aria-label="LeetProgress Problem Table" className="w-full">
+                            <Table aria-label="LeetProgress Problem Table" className="w-full table-fixed">
                                 <TableHeader>
-                                    <TableColumn className="text-center text-lg font-bold uppercase bg-gray-200 p-4">Problems</TableColumn>
-                                    <TableColumn className="text-center text-lg font-bold uppercase bg-gray-200 p-4">Contest</TableColumn>
-                                    <TableColumn className="text-center text-lg font-bold uppercase bg-gray-200 p-4">Topics</TableColumn>
+                                    <TableColumn className="text-center text-lg font-bold uppercase bg-gray-200 p-4 w-[40%]">Problems</TableColumn>
+                                    <TableColumn className="text-center text-lg font-bold uppercase bg-gray-200 p-4 w-[30%]">Contest</TableColumn>
+                                    <TableColumn className="text-center text-lg font-bold uppercase bg-gray-200 p-4 w-[30%]">Topics</TableColumn>
                                 </TableHeader>
                                 <TableBody>
                                     {currentPosts.map((problem, index) => (
@@ -73,25 +73,25 @@ export default function Problems() {
                                             onClick={() => window.open(problem.link, "_blank")}
                                             className={`cursor-pointer border-b border-gray-300 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"} hover:bg-gray-100 transition`}
                                         >
-                                            <TableCell className="text-left text-[13px] md:text-lg p-4">
+                                            <TableCell className="text-left text-[10px] md:text-[15px] p-4">
                                                 <div className="flex items-center gap-2">
                                                     <Image
                                                         src="/leetlogo.png"
                                                         alt="LeetProgress Logo"
-                                                        width={50}
-                                                        height={50}
-                                                        className="rounded-full"
+                                                        width={40}
+                                                        height={40}
+                                                        className="rounded-full hidden md:block"
                                                     />
                                                     <span>{problem.title}</span>
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="text-left text-[10px] md:text-lg p-4">{problem.contestName}</TableCell>
+                                            <TableCell className="text-left text-[8px] md:text-[12px] p-4">{problem.contestName}</TableCell>
                                             <TableCell className="text-center p-4">
                                                 <div className="flex flex-wrap gap-2">
                                                     {problem.topics.map((topic, i) => (
                                                         <span
                                                             key={i}
-                                                            className="bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-[10px] md:text-sm"
+                                                            className="bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-[8px] md:text-[10px]"
                                                         >
                                                             {topic}
                                                         </span>
@@ -104,7 +104,6 @@ export default function Problems() {
                                 </TableBody>
                             </Table>
 
-                            {/* Pagination */}
                             <div className="flex justify-center my-4 gap-2">
                                 <button
                                     onClick={() => setCurrentPage(currentPage - 1)}
