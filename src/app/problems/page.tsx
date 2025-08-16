@@ -45,11 +45,12 @@ export default function Problems() {
 
         async function getContestSorted(contestProblems: ProblemType[]) {
             return contestProblems
+                .filter(p => p.contestName)
                 .map(p => ({
-                ...p,
-                contestDate: getContestDate(p.contestName)
-            }))
-            .sort((a, b) => b.contestDate.getTime() - a.contestDate.getTime()); 
+                    ...p,
+                    contestDate: getContestDate(p.contestName!)
+                }))
+                .sort((a, b) => b.contestDate.getTime() - a.contestDate.getTime());
         }
 
         const getData = async () => {
