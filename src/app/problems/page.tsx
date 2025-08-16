@@ -5,6 +5,7 @@ import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from 
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import httpAxios from "../utils/httpAxios";
+
 type ProblemType = {
     title: string;
     contestName: string;
@@ -20,11 +21,43 @@ export default function Problems() {
     const [loading, setLoading] = useState(false);
     const postsPerPage = 5;
     useEffect(() => {
+        function extractContestNumber(contestName: string): number {
+            return parseInt(contestName.match(/\d+/)[0], 10);
+        }
+
+        function getContestDate(contestName: string): Date {
+            const num = extractContestNumber(contestName);
+
+            if (contestName.startsWith("Weekly")) {
+                // Weekly Contest 395 = Apr 28, 2024 (Sun, 8 AM IST)
+                const base = new Date("2024-04-28T08:00:00+05:30");
+                const diff = num - 395;
+                return new Date(base.getTime() + diff * 7 * 24 * 60 * 60 * 1000);
+            } else if (contestName.startsWith("Biweekly")) {
+                // Biweekly Contest 129 = Apr 27, 2024 (Sat, 8 PM IST)
+                const base = new Date("2024-04-27T20:00:00+05:30");
+                const diff = num - 129;
+                return new Date(base.getTime() + diff * 14 * 24 * 60 * 60 * 1000);
+            }
+
+            throw new Error("Unknown contest type: " + contestName);
+        }
+
+        async function getContestSorted(contestProblems: ProblemType[]) {
+            return contestProblems
+                .map(p => ({
+                ...p,
+                contestDate: getContestDate(p.contestName)
+            }))
+            .sort((a, b) => b.contestDate.getTime() - a.contestDate.getTime()); 
+        }
+
         const getData = async () => {
             setLoading(true);
             try {
                 const result = await httpAxios.post("/api/problems", { problemNumber }).then(res => res.data);
-                setProblems(result);
+                const sortedProblems = await getContestSorted(result);
+                setProblems(sortedProblems);
                 setCurrentPage(1);
             } catch (error) {
                 console.log(error);
