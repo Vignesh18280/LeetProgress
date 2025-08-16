@@ -22,7 +22,7 @@ export default function Problems() {
     const postsPerPage = 5;
     useEffect(() => {
         function extractContestNumber(contestName: string): number {
-            return parseInt(contestName.match(/\d+/)[0], 10);
+            return parseInt(contestName.match(/\d+/)?.[0] ?? "1", 10);
         }
 
         function getContestDate(contestName: string): Date {
