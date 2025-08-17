@@ -36,7 +36,6 @@ export async function POST(request) {
             userId: user._id
         }
         const token = await jwt.sign(tokenData, process.env.token_key, {expiresIn:'1d'});
-        // console.log(token);
         user = {
             _id: user._id,
             name: user.name,

@@ -104,7 +104,7 @@ export default function Problems() {
         userId: user._id,
         checkboxValue: checkedItems,
       });
-      console.log("Checkbox history updated:", res.data);
+    //   console.log("Checkbox history updated:", res.data);
     } catch (err) {
       console.error("Failed to update checkbox history:", err);
     }
@@ -136,72 +136,75 @@ export default function Problems() {
                     ) : (
                         <>
                             <Table aria-label="LeetProgress Problem Table" className="w-full table-fixed">
-                                <TableHeader>
-                                    <TableColumn className="text-center text-lg font-bold uppercase bg-gray-200 p-4 w-[5%]">solved</TableColumn>
-                                    <TableColumn className="text-center text-lg font-bold uppercase bg-gray-200 p-4 w-[40%]">Problems</TableColumn>
-                                    <TableColumn className="text-center text-lg font-bold uppercase bg-gray-200 p-4 w-[30%]">Contest</TableColumn>
-                                    <TableColumn className="text-center text-lg font-bold uppercase bg-gray-200 p-4 w-[30%]">Topics</TableColumn>
-                                </TableHeader>
-                                <TableBody>
-                                    {currentPosts.map((problem, index) => (
-                                        <TableRow
-                                            key={index}
-                                            className={`cursor-pointer border-b border-gray-300 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"} hover:bg-gray-100 transition`}
-                                        >
-                                            <TableCell className="md:text-[15px] p-4 flex items-center">
-                                                <label className="flex items-center space-x-3 cursor-pointer select-none">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={checkedItems.includes(problem.title)}
-                                                        onChange={() => handleChange(problem.title)}
-                                                        className="hidden"
-                                                    />
+  <TableHeader>
+    <TableColumn className="w-[5%] text-center text-lg font-bold uppercase bg-gray-200 p-4">Solved</TableColumn>
+    <TableColumn className="w-[45%] text-left text-lg font-bold uppercase bg-gray-200 p-4">Problems</TableColumn>
+    <TableColumn className="w-[25%] text-left text-lg font-bold uppercase bg-gray-200 p-4">Contest</TableColumn>
+    <TableColumn className="w-[25%] text-center text-lg font-bold uppercase bg-gray-200 p-4">Topics</TableColumn>
+  </TableHeader>
+  <TableBody>
+    {currentPosts.map((problem, index) => (
+      <TableRow
+        key={index}
+        className={`border-b border-gray-300 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"} hover:bg-gray-100 transition`}
+      >
+        <TableCell className="w-[5%] text-center p-4">
+          <label className="flex items-center justify-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={checkedItems.includes(problem.title)}
+              onChange={() => handleChange(problem.title)}
+              className="hidden"
+            />
+            <span
+              className={`
+                w-6 h-6 flex items-center justify-center rounded-md border
+                transition-colors duration-200
+                ${checkedItems.includes(problem.title) 
+                  ? 'bg-gray-700' 
+                  : 'bg-white border-gray-400 hover:border-gray-600'}
+              `}
+            >
+              {checkedItems.includes(problem.title) && (
+                <Check className="w-4 h-4 text-white" />
+              )}
+            </span>
+          </label>
+        </TableCell>
 
-                                                    <span
-                                                        className={`
-                                                        w-6 h-6 flex items-center justify-center rounded-md border
-                                                        transition-colors duration-200
-                                                        ${checkedItems.includes(problem.title) 
-                                                            ? 'bg-gray-700' 
-                                                            : 'bg-white border-gray-400 hover:border-gray-600 hover:border-10'}
-                                                        `}
-                                                    >
-                                                        {checkedItems.includes(problem.title) && (
-                                                        <Check className="w-4 h-4 text-white" />
-                                                        )}
-                                                    </span>
-                                                </label>
-                                            </TableCell>
-                                            <TableCell  onClick={() => window.open(problem.link, "_blank")} className="text-left text-[10px] md:text-[15px] p-4">
-                                                <div className="flex items-center gap-2">
-                                                    <Image
-                                                        src="/leetlogo.png"
-                                                        alt="LeetProgress Logo"
-                                                        width={40}
-                                                        height={40}
-                                                        className="rounded-full hidden md:block"
-                                                    />
-                                                    <span>{problem.title}</span>
-                                                </div>
-                                            </TableCell>
-                                            <TableCell  onClick={() => window.open(problem.link, "_blank")} className="text-left text-[8px] md:text-[12px] p-4">{problem.contestName}</TableCell>
-                                            <TableCell  onClick={() => window.open(problem.link, "_blank")} className="text-center p-4">
-                                                <div className="flex flex-wrap gap-2">
-                                                    {problem.topics.map((topic, i) => (
-                                                        <span
-                                                            key={i}
-                                                            className="bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-[8px] md:text-[10px]"
-                                                        >
-                                                            {topic}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            </TableCell>
+        <TableCell className="w-[45%] text-left p-4 cursor-pointer" onClick={() => window.open(problem.link, "_blank")}>
+          <div className="flex items-center gap-2">
+            <Image
+              src="/leetlogo.png"
+              alt="LeetProgress Logo"
+              width={40}
+              height={40}
+              className="rounded-full hidden md:block"
+            />
+            <span>{problem.title}</span>
+          </div>
+        </TableCell>
 
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
+        <TableCell className="w-[25%] text-left p-4 cursor-pointer" onClick={() => window.open(problem.link, "_blank")}>
+          {problem.contestName}
+        </TableCell>
+
+        <TableCell className="w-[25%] text-left p-4 cursor-pointer" onClick={() => window.open(problem.link, "_blank")}>
+  <div className="flex flex-wrap gap-2 justify-start">
+    {problem.topics.map((topic, i) => (
+      <span
+        key={i}
+        className="bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-[8px] md:text-[10px]"
+      >
+        {topic}
+      </span>
+    ))}
+  </div>
+</TableCell>
+      </TableRow>
+    ))}
+  </TableBody>
+</Table>
 
                             <div className="flex justify-center my-4 gap-2">
                                 <button
