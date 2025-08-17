@@ -13,9 +13,12 @@ import { toast } from "sonner";
 import { AxiosError } from "axios";
 
 interface User {
+  _id: any;
+  id: any;
   name: string;
   email: string;
   profileUrl: string;
+  checkboxHistory?: string[];
   user: {
     image: string;
     name: string;
