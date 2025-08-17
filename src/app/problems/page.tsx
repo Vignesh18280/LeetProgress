@@ -108,7 +108,7 @@ export default function Problems() {
     } catch (err) {
       console.error("Failed to update checkbox history:", err);
     }
-  }, 1500); 
+  }, 1000); 
 
   return () => clearTimeout(handler); 
 }, [checkedItems, user]);
