@@ -5,6 +5,8 @@ import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from 
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import httpAxios from "../utils/httpAxios";
+import { Check } from "lucide-react";
+import { useUser } from "../context/UserContext";
 
 type ProblemType = {
     title: string;
@@ -17,8 +19,10 @@ export default function Problems() {
     const [problems, setProblems] = useState<ProblemType[]>([]);
     const [topic, setTopic] = useState<string | null>(null);
     const [problemNumber, setProblemNumber] = useState(3);
+    const [checkedItems, setCheckedItems] = useState<string[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(false);
+    const { user } = useUser();
     const postsPerPage = 5;
     useEffect(() => {
         function extractContestNumber(contestName: string): number {
@@ -72,6 +76,43 @@ export default function Problems() {
         setCurrentPage(1);
     }, [topic]);
 
+    useEffect(() => {
+        if(!user){
+            return;
+        }
+        const fetchCheck = async () => {
+            const res = await httpAxios.get(`/api/check-box?userId=${user._id}`);
+            setCheckedItems(res.data.checkboxHistory);
+        };
+        fetchCheck();
+    }, [user]);
+    const handleChange = (item: string) => {
+        if (!user) return;
+        const updated = checkedItems.includes(item)
+            ? checkedItems.filter((i) => i !== item)
+            : [...checkedItems, item];
+
+        setCheckedItems(updated); 
+    };
+
+    useEffect(() => {
+  if (!user) return;
+
+  const handler = setTimeout(async () => {
+    try {
+      const res = await httpAxios.post("/api/check-box", {
+        userId: user._id,
+        checkboxValue: checkedItems,
+      });
+      console.log("Checkbox history updated:", res.data);
+    } catch (err) {
+      console.error("Failed to update checkbox history:", err);
+    }
+  }, 3000); 
+
+  return () => clearTimeout(handler); 
+}, [checkedItems, user]);
+
     const indexOfLast = currentPage * postsPerPage;
     const indexOfFirst = indexOfLast - postsPerPage;
     const filteredProblems = topic
@@ -96,6 +137,7 @@ export default function Problems() {
                         <>
                             <Table aria-label="LeetProgress Problem Table" className="w-full table-fixed">
                                 <TableHeader>
+                                    <TableColumn className="text-center text-lg font-bold uppercase bg-gray-200 p-4 w-[5%]">solved</TableColumn>
                                     <TableColumn className="text-center text-lg font-bold uppercase bg-gray-200 p-4 w-[40%]">Problems</TableColumn>
                                     <TableColumn className="text-center text-lg font-bold uppercase bg-gray-200 p-4 w-[30%]">Contest</TableColumn>
                                     <TableColumn className="text-center text-lg font-bold uppercase bg-gray-200 p-4 w-[30%]">Topics</TableColumn>
@@ -104,10 +146,33 @@ export default function Problems() {
                                     {currentPosts.map((problem, index) => (
                                         <TableRow
                                             key={index}
-                                            onClick={() => window.open(problem.link, "_blank")}
                                             className={`cursor-pointer border-b border-gray-300 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"} hover:bg-gray-100 transition`}
                                         >
-                                            <TableCell className="text-left text-[10px] md:text-[15px] p-4">
+                                            <TableCell className="md:text-[15px] p-4 flex items-center">
+                                                <label className="flex items-center space-x-3 cursor-pointer select-none">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={checkedItems.includes(problem.title)}
+                                                        onChange={() => handleChange(problem.title)}
+                                                        className="hidden"
+                                                    />
+
+                                                    <span
+                                                        className={`
+                                                        w-6 h-6 flex items-center justify-center rounded-md border
+                                                        transition-colors duration-200
+                                                        ${checkedItems.includes(problem.title) 
+                                                            ? 'bg-gray-700' 
+                                                            : 'bg-white border-gray-400 hover:border-gray-600 hover:border-10'}
+                                                        `}
+                                                    >
+                                                        {checkedItems.includes(problem.title) && (
+                                                        <Check className="w-4 h-4 text-white" />
+                                                        )}
+                                                    </span>
+                                                </label>
+                                            </TableCell>
+                                            <TableCell  onClick={() => window.open(problem.link, "_blank")} className="text-left text-[10px] md:text-[15px] p-4">
                                                 <div className="flex items-center gap-2">
                                                     <Image
                                                         src="/leetlogo.png"
@@ -119,8 +184,8 @@ export default function Problems() {
                                                     <span>{problem.title}</span>
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="text-left text-[8px] md:text-[12px] p-4">{problem.contestName}</TableCell>
-                                            <TableCell className="text-center p-4">
+                                            <TableCell  onClick={() => window.open(problem.link, "_blank")} className="text-left text-[8px] md:text-[12px] p-4">{problem.contestName}</TableCell>
+                                            <TableCell  onClick={() => window.open(problem.link, "_blank")} className="text-center p-4">
                                                 <div className="flex flex-wrap gap-2">
                                                     {problem.topics.map((topic, i) => (
                                                         <span
@@ -146,7 +211,6 @@ export default function Problems() {
                                 >
                                     &laquo;
                                 </button>
-
                                 {Array.from({ length: totalPages }, (_, i) => i + 1)
                                     .filter((page) =>
                                         page === 1 ||

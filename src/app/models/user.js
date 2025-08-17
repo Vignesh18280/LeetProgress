@@ -14,7 +14,11 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    profileUrl:String
+    profileUrl:String,
+    checkboxHistory: {
+        type: [String],  
+        default: []
+    }
 })
 
 export const User = mongoose.models.users || mongoose.model("users", userSchema);
